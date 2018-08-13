@@ -137,9 +137,9 @@ getDataCache() {
 
 **Quer ajudar?**
 
-Encontrou um problema ou tem uma idéia para poder melhorar este serviço? Basta implementar e fazer um pull request, será um prazer receber sua ajuda :)
+Encontrou um problema ou tem uma ideia para poder melhorar este serviço? Basta implementar e fazer um pull request, será um prazer receber sua ajuda :)
 
-Se quiser tambem podem entrar em contato, vamos bater um papo e ter novas idéias juntos!
+Se quiser tambem podem entrar em contato, vamos bater um papo e ter novas ideias juntos!
 
 ***Skype***: guilherme_on50
 
