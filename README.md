@@ -7,7 +7,7 @@ Sempre que desenvolver algo que te ajudou de alguma maneira, e você acha que po
 
 Pedimos apenas que, sempre que for colocar algo novo, também documente seu trabalho de uma maneira clara e prática para que outros possam aproveitar ao máximo da sua contribuição sem nenhum problema.
 ***
-**Projetos**
+**Índice**
 - ***Cache Service (Angular + API Service)***
 Desenvolvido com objetivo de ajudar na economia de requisições e banda do cliente. Permite armazenar dados em um tipo de cache para que possa ser utilizado quando necessário.
 
