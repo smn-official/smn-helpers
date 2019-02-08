@@ -11,5 +11,8 @@ Pedimos apenas que, sempre que for colocar algo novo, também documente seu trab
 - ***Cache Service (Angular + API Service)***
 Desenvolvido com objetivo de ajudar na economia de requisições e banda do cliente. Permite armazenar dados em um tipo de cache para que possa ser utilizado quando necessário.
 
+- ***smn-class-autocomplete***
+Classe utilizada para a implementação simplificação do UiAutocomplete em projetos com o SMNUI.
+
 ***
 **Feito com ❤️ pelos Devs da [SMN](http://smn.com.br/)**
