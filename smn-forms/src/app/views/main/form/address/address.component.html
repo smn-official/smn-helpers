@@ -1,0 +1,49 @@
+<div class="ui-flex-container break-on-s960">
+
+    <app-cep [(model)]="address.cep" (foundAddress)="setAddress($event)"
+             (changeModel)="address.cep = $event; this.update()"></app-cep>
+
+    <app-field [(model)]="address.logradouro" (changeModel)="address.logradouro = $event; this.update()"
+               [params]="{label: 'Rua', name: 'rua', required: true}"></app-field>
+
+    <app-field [(model)]="address.numero" (changeModel)="address.numero = $event; this.update()"
+               [params]="{label: 'Numero', name: 'numero', maxLength: 8, required: true}"></app-field>
+
+</div>
+
+<div class="ui-flex-container break-on-s960">
+
+    <app-field [(model)]="address.bairro" (changeModel)="address.bairro = $event; this.update()"
+               [params]="{label: 'Bairro', name: 'bairro', required: true}"></app-field>
+
+    <app-select
+        [(model)]="address.uf"
+        [paramsRequest]="{
+            api: 'smn-forms',
+            funcionalidade: 'uf',
+            metodo: 'dropdown'
+        }"
+        (changeModel)="address.uf = $event; address.idCidade = null; address.cidade = ''; this.update()"
+        [params]="{label: 'Estado', name: 'estado', modelProperty: 'sigla', required: true}"></app-select>
+
+    <app-autocomplete
+        [(model)]="address.cidade"
+        [(modelProperty)]="address.idCidade"
+        [extraParams]="{uf: address.uf}"
+        [paramsRequest]="{
+            api: 'smn-forms',
+            funcionalidade: 'cidade',
+            metodo: 'dropdown'
+        }"
+        (changeModel)="address.cidade = $event.model; address.idCidade = $event.modelProperty; this.update()"
+        [params]="{label: 'Cidade', name: 'cidade', required: true}"></app-autocomplete>
+
+</div>
+
+<div class="ui-flex-container break-on-s960">
+
+    <app-field
+        [(model)]="address.complemento" (changeModel)="address.complemento = $event; this.update()"
+        [params]="{label: 'Complemento', name: 'complemento'}"></app-field>
+
+</div>
