@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~ng-smn-ui/lib/core/core";
+@import "~ng-smn-ui/lib/core/theme";
+
+$primary: (color: 'blue', hue: '500');
+$accent: (color: 'blue-grey', hue: '900');
+
+$theme: ui-theme($primary, $accent);
+$theme-dark: ui-theme($primary, $accent, true);
+
+@include ui-core();
+@include ui-build-theme($theme);
+
+.dark {
+  @include ui-build-theme($theme-dark);
+}
+
+//.theme-acif {
+//  $primary: (color: 'deep-purple', hue: 'ACIF');
+//  $accent: (color: 'indigo', hue: '500');
+//
+//  $theme-acif: ui-theme($primary, $accent);
+//
+//  @include ui-build-theme($theme-acif);
+//}
+//
+//.theme-acimg {
+//  $primary: (color: 'green', hue: '600');
+//  $accent: (color: 'indigo', hue: '500');
+//
+//  $theme-acimg: ui-theme($primary, $accent);
+//
+//  @include ui-build-theme($theme-acimg);
+//}
+
+.form-divider {
+  margin: 16px -16px;
+}
+
+/deep/ .material-icons.green {
+  margin-right: 16px;
+  color: ui-color('green', '500');
+}
+
+/deep/ .ui-message.success, .material-icons.success, label.success {
+  color: #43a047;
+}
+
+/deep/ ui-input-container.success .ui-control {
+  border-color: #43a047;
+  color: rgba(0, 0, 0, .67);
+}

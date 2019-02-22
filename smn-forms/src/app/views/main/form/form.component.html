@@ -1,0 +1,74 @@
+<div class="ui-s960">
+
+  <ui-card class="elevate-on-toolbar">
+
+    <ui-card-content>
+
+      <form #form="ngForm" class="ui-validate on-dirty on-submit">
+
+        <ui-subheader>Comum</ui-subheader>
+
+        <app-field [params]="field" (changeModel)="info.nome = $event"></app-field>
+
+        <div class="ui-divider form-divider"></div>
+
+        <ui-subheader>CPF</ui-subheader>
+
+        <app-cpf [(model)]="info.cpf" (changeModel)="info.cpf = $event"></app-cpf>
+
+        <ui-subheader>CEP</ui-subheader>
+
+        <app-cep [(model)]="info.cep"
+                 [params]="{required: true, name: 'cepForm'}"
+                 (changeModel)="info.cep = $event;"></app-cep>
+
+        <div class="ui-divider form-divider"></div>
+
+        <ui-subheader>Autocomplete</ui-subheader>
+
+        <app-autocomplete
+          [(model)]="info.cidade"
+          [(modelProperty)]="info.idCidade"
+          [paramsRequest]="{
+                        api: 'smn-forms',
+                        funcionalidade: 'cidade',
+                        metodo: 'dropdown'
+                    }"
+          (changeModel)="info.cidade = $event.model; info.idCidade = $event.modelProperty;"
+          [params]="{label: 'Cidade', name: 'cidadeForm', required: true}"></app-autocomplete>
+
+        <div class="ui-divider form-divider"></div>
+
+        <ui-subheader>Select</ui-subheader>
+
+        <app-select
+          [(model)]="info.uf"
+          [paramsRequest]="{
+                        api: 'smn-forms',
+                        funcionalidade: 'uf',
+                        metodo: 'dropdown'
+                    }"
+          (changeModel)="info.uf = $event;"
+          [params]="{label: 'Estado', name: 'formEstado', modelProperty: 'sigla', required: true}"></app-select>
+
+        <div class="ui-divider form-divider"></div>
+
+        <ui-subheader>Endereço</ui-subheader>
+
+        <app-address [(model)]="info.address" (changeModel)="info.address = $event"></app-address>
+
+      </form>
+
+      <span>Valid: {{ form.valid }}</span>
+
+      <pre>
+                {{ info | json }}
+            </pre>
+
+    </ui-card-content>
+
+  </ui-card>
+
+  <div style="height: 80px;"></div>
+
+</div>

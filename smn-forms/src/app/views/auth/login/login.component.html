@@ -1,0 +1,218 @@
+<div class="core">
+    <div class="logo">
+        <img src="../../../../assets/images/logo-mercurio-horizontal.png" alt="Mercúrio logo">
+    </div>
+    <ui-card>
+        <div class="ui-progress accent" [class.hide]="!loading">
+            <div class="indeterminate"></div>
+        </div>
+        <ui-tabs-pages #tabsPages>
+            <div class="page pre-info">
+                <form #preLoginForm="ngForm" class="ui-validate on-submit on-dirty" (submit)="getInfo(preLoginForm, preLogin)">
+                    <ui-card-title>Inicie sua sessão</ui-card-title>
+                    <ui-card-content>
+                        <ui-input-container>
+                            <input [type]="authByEmail ? 'email' : 'text'"
+                                   name="usuario"
+                                   [(ngModel)]="preLogin.usuario"
+                                   uiInput
+                                   required
+                                   #preLoginUsuario="ngModel"
+                                   [pattern]="authByEmail ? '[a-z0-9!#$%&\'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\\.[a-z0-9-]+)*' : null"
+                                   id="pre-login-usuario"
+                                   class="accent"
+                                   autofocus>
+                            <label for="pre-login-usuario">{{ authByEmail ? 'E-mail' : 'Usuário' }}</label>
+                            <div class="ui-messages">
+                                <div *ngIf="preLoginUsuario.errors && preLoginUsuario.dirty">
+                                    <div class="ui-message error" [hidden]="!preLoginUsuario.pristine && !preLoginUsuario.errors.required">
+                                        Use seu {{ authByEmail ? 'e-mail' : 'nome de usuário' }}
+                                    </div>
+                                    <div class="ui-message error" [hidden]="!preLoginUsuario.errors.pattern">
+                                        Use um e-mail válido
+                                    </div>
+                                    <div class="ui-message error" [hidden]="!preLoginUsuario.errors.notFound">
+                                        Este {{ authByEmail ? 'e-mail' : 'nome de usuário' }} não existe
+                                    </div>
+                                </div>
+                            </div>
+                        </ui-input-container>
+                    </ui-card-content>
+                    <div class="ui-button-container cover">
+                        <button class="ui-button accent full" uiRipple>Próximo</button>
+                    </div>
+                </form>
+            </div>
+            <div class="page">
+                <form #loginForm="ngForm" class="ui-validate on-submit on-dirty" (submit)="login(loginForm, info)">
+                    <fieldset>
+                        <ui-toolbar class="flat">
+                            <button class="ui-button flat icon" type="button" uiRipple (click)="backToLogin()">
+                                <i class="material-icons">arrow_back</i>
+                            </button>
+                        </ui-toolbar>
+                        <ul class="ui-list no-active" [class.multi-line]="authByEmail" style="padding: 0">
+                            <li>
+                                <div class="avatar"
+                                     [ngStyle]="{'background-image': info.imagem ? 'url(' + info.imagem + ')' : '',
+                                                 'background-color': info.imagem ? 'white' : info.cor,
+                                                 'color': isBright(info.cor) ? 'black': 'white'}">
+                                    <span *ngIf="info && !info.imagem && info.nome">{{ info.nome.charAt(0) }}</span>
+                                </div>
+                                <div class="primary" *ngIf="!authByEmail">{{ info.nome }}</div>
+                                <div class="lines" *ngIf="authByEmail">
+                                    <div class="primary">{{ info.nome }}</div>
+                                    <div class="secondary">{{ info.email }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ui-card-content>
+                            <ui-input-container>
+                                <input [type]="typeText ? 'text' : 'password'"
+                                       [(ngModel)]="info.senha"
+                                       uiInput
+                                       required
+                                       name="senha"
+                                       #loginSenha="ngModel"
+                                       id="login-senha"
+                                       class="accent">
+                                <label>Senha</label>
+                                <div class="suffix ui-button flat icon" (click)="typeText = !typeText" uiRipple>
+                                    <i class="material-icons light">{{ typeText ? 'visibility_off' : 'visibility' }}</i>
+                                </div>
+                                <div class="ui-messages">
+                                    <div *ngIf="loginSenha.errors && loginSenha.dirty">
+                                        <div class="ui-message error" [hidden]="!loginSenha.pristine && !loginSenha.errors.required">
+                                            Insira uma senha
+                                        </div>
+                                        <div class="ui-message error" [hidden]="!loginSenha.errors.wrongPassword">
+                                            Senha incorreta
+                                        </div>
+                                    </div>
+                                    <div class="ui-message counter">
+                                        Esqueci minha senha
+                                    </div>
+                                </div>
+                            </ui-input-container>
+                            <ui-option class="primary" style="margin-top: 16px">
+                                <input type="checkbox"
+                                       [checked]="info.matenhaConectado"
+                                       (change)="info.matenhaConectado = $event.target.checked">
+                                <span>Manter conectado</span>
+                            </ui-option>
+                        </ui-card-content>
+                        <div class="ui-button-container cover">
+                            <button class="ui-button accent full" uiRipple>Login</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="page bloqueado">
+                <ui-toolbar class="flat">
+                    <button class="ui-button flat icon" type="button" uiRipple (click)="tabsPages.pagesGoToPage(1)">
+                        <i class="material-icons">arrow_back</i>
+                    </button>
+                </ui-toolbar>
+                <ui-card-content>
+                    <div>{{ info.nome }}, seu usuário está bloqueado.</div>
+                </ui-card-content>
+            </div>
+            <div class="page bloqueado-por-horario">
+                <ui-toolbar class="flat">
+                    <button class="ui-button flat icon" type="button" uiRipple (click)="tabsPages.pagesGoToPage(1)">
+                        <i class="material-icons">arrow_back</i>
+                    </button>
+                </ui-toolbar>
+                <ui-card-content>
+                    <div>{{ info.nome }}, você está bloqueado à acessar neste horário.</div>
+                </ui-card-content>
+            </div>
+            <div class="page senha-expirada">
+                <ui-toolbar class="flat">
+                    <button class="ui-button flat icon" type="button" uiRipple (click)="tabsPages.pagesGoToPage(1)">
+                        <i class="material-icons">arrow_back</i>
+                    </button>
+                </ui-toolbar>
+                <form #senhaExpiradaForm="ngForm" class="ui-validate on-submit on-dirty" (submit)="redefinirSenha(senhaExpiradaForm, senhaExpirada)">
+                    <ui-card-content>
+                        <div class="info-text secondary-text">{{ senhaExpirada.nome }}, por motivos de segurança expiramos sua senha. Por favor crie uma nova.</div>
+                        <ui-input-container>
+                            <input [type]="senhaExpirada.typeTextSenhaAntiga ? 'text' : 'password'"
+                                   [(ngModel)]="senhaExpirada.senha"
+                                   uiInput
+                                   required
+                                   name="senhaAntiga"
+                                   #senhaExpiradaAntiga="ngModel"
+                                   id="senha-antiga"
+                                   class="accent">
+                            <label>Senha antiga</label>
+                            <div class="suffix ui-button flat icon" (click)="senhaExpirada.typeTextSenhaAntiga = !senhaExpirada.typeTextSenhaAntiga" uiRipple>
+                                <i class="material-icons light">{{ senhaExpirada.typeTextSenhaAntiga ? 'visibility_off' : 'visibility' }}</i>
+                            </div>
+                            <div class="ui-messages">
+                                <div *ngIf="senhaExpiradaAntiga.errors && senhaExpiradaAntiga.dirty">
+                                    <div class="ui-message error" [hidden]="!senhaExpiradaAntiga.pristine && !senhaExpiradaAntiga.errors.required">
+                                        Insira uma senha
+                                    </div>
+                                    <div class="ui-message error" [hidden]="!senhaExpiradaAntiga.errors.wrongPassword">
+                                        Senha incorreta
+                                    </div>
+                                </div>
+                            </div>
+                        </ui-input-container>
+                        <ui-input-container>
+                            <input [type]="senhaExpirada.typeTextNovaSenha ? 'text' : 'password'"
+                                   [(ngModel)]="senhaExpirada.novaSenha"
+                                   uiInput
+                                   required
+                                   name="novaSenha"
+                                   #senhaExpiradaNovaSenha="ngModel"
+                                   (ngModelChange)="validarSenhasDivergentes(senhaExpiradaForm)"
+                                   id="nova-senha"
+                                   class="accent">
+                            <label>Nova senha</label>
+                            <div class="suffix ui-button flat icon" (click)="senhaExpirada.typeTextNovaSenha = !senhaExpirada.typeTextNovaSenha" uiRipple>
+                                <i class="material-icons light">{{ senhaExpirada.typeTextNovaSenha ? 'visibility_off' : 'visibility' }}</i>
+                            </div>
+                            <div class="ui-messages">
+                                <div *ngIf="senhaExpiradaNovaSenha.errors && senhaExpiradaNovaSenha.dirty">
+                                    <div class="ui-message error" [hidden]="!senhaExpiradaNovaSenha.pristine && !senhaExpiradaNovaSenha.errors.required">
+                                        Insira uma senha
+                                    </div>
+                                </div>
+                            </div>
+                        </ui-input-container>
+                        <ui-input-container>
+                            <input [type]="senhaExpirada.typeTextConfirmacaoNovaSenha ? 'text' : 'password'"
+                                   [(ngModel)]="senhaExpirada.confirmacaoNovaSenha"
+                                   uiInput
+                                   required
+                                   name="confirmacaoSenha"
+                                   #senhaExpiradaConfirmacaoNovaSenha="ngModel"
+                                   (ngModelChange)="validarSenhasDivergentes(senhaExpiradaForm)"
+                                   id="confirmacao-nova-senha"
+                                   class="accent">
+                            <label>Confirmação de senha</label>
+                            <div class="suffix ui-button flat icon" (click)="senhaExpirada.typeTextConfirmacaoNovaSenha = !senhaExpirada.typeTextConfirmacaoNovaSenha" uiRipple>
+                                <i class="material-icons light">{{ senhaExpirada.typeTextConfirmacaoNovaSenha ? 'visibility_off' : 'visibility' }}</i>
+                            </div>
+                            <div class="ui-messages">
+                                <div *ngIf="senhaExpiradaConfirmacaoNovaSenha.errors && senhaExpiradaConfirmacaoNovaSenha.dirty">
+                                    <div class="ui-message error" [hidden]="!senhaExpiradaConfirmacaoNovaSenha.pristine && !senhaExpiradaConfirmacaoNovaSenha.errors.required">
+                                        Insira uma senha
+                                    </div>
+                                    <div class="ui-message error" [hidden]="!senhaExpiradaConfirmacaoNovaSenha.errors.notEqual">
+                                        As senhas não conferem
+                                    </div>
+                                </div>
+                            </div>
+                        </ui-input-container>
+                    </ui-card-content>
+                    <div class="ui-button-container cover">
+                        <button class="ui-button accent full" uiRipple>Redefinir senha</button>
+                    </div>
+                </form>
+            </div>
+        </ui-tabs-pages>
+    </ui-card>
+</div>

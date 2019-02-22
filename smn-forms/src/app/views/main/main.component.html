@@ -1,0 +1,97 @@
+<ui-toolbar class="fixed flat elevate-on-scroll primary elevate-on-s960" id="app-header">
+    <button (click)="menuOpen = true" class="ui-button flat icon" uiRipple>
+        <i class="material-icons">menu</i>
+    </button>
+    <div class="logo">
+        FORMS
+    </div>
+    <span class="title">{{ title }}</span>
+    <div class="align-right">
+        <div class="avatar"
+             [uiMenuTrigger]="menuUser"
+             menu-align="right"
+             theme-class="menu-user"
+             [ngStyle]="{'background-image': user.imagem ? 'url(' + user.imagem + ')' : '',
+                         'background-color': user.imagem ? 'white' : user.cor,
+                         'color': isBright(user.cor) ? 'black': 'white'}">
+            <span *ngIf="user && !user.imagem && user.nome">{{ user.nome.charAt(0) }}</span>
+        </div>
+    </div>
+</ui-toolbar>
+
+<!-- Add class 'persistent' para deixar o menu persistente, deve também descomentar o código no main.component -->
+<ui-nav-drawer [(open)]="menuOpen">
+    <ui-toolbar class="flat">
+        <button (click)="menuOpen = false" class="ui-button flat icon" uiRipple>
+            <i class="material-icons">arrow_back</i>
+        </button>
+        <div class="logo">
+            <img src="assets/images/logo-acif.svg" alt="Acif logo" title="Acif logo" (click)="paz()">
+        </div>
+    </ui-toolbar>
+    <div class="ui-nav-drawer-overflow">
+        <ui-input-container class="search-menu" style="padding: 0 16px">
+            <input #searchFormText="ngModel" type="text" name="searchText" [(ngModel)]="searchText"
+                   uiMaxlength="200" uiInput [persistPlaceholder]="true" placeholder="Pesquisa"
+                   (input)="searchMenu(searchText)">
+            <div class="icon" (click)="searchText ? closeSearch() : searchMenu(searchText)">
+                <i class="material-icons">{{ searchText ? 'close' : 'search' }}</i>
+            </div>
+        </ui-input-container>
+
+
+        <ul class="ui-list" *ngIf="searchText">
+
+            <div class="ui-list-item multi-line" *ngFor="let item of menu"
+                 (click)="goToPage(item.url)"
+                 [routerLinkActive]="['active']"
+                 [routerLinkActiveOptions]="{ exact: true }">
+                <div class="lines">
+                    <div class="primary">
+                        {{ item.name }}
+                    </div>
+                    <div class="secondary">
+                        {{ toPath(item.path) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-list-item" *ngIf="!menu || !menu.length">Nenhuma opção foi encontrada</div>
+
+        </ul>
+
+        <div *ngIf="!searchText">
+            <div class="ui-list">
+                <a class="ui-list-item" uiRipple routerLink="/" [routerLinkActive]="['active']"
+                   [routerLinkActiveOptions]="{ exact: true }">Home</a>
+            </div>
+            <ui-list [list]="menu" [item-model]="menuConfig" [routerLinkActive]="['active']"
+                     [routerLinkActiveOptions]="{ exact: true }"></ui-list>
+        </div>
+
+    </div>
+</ui-nav-drawer>
+
+<div *ngIf="readyToGo">
+    <router-outlet></router-outlet>
+</div>
+
+<ui-menu #menuUser>
+    <header>
+        <div class="avatar"
+             [uiMenuTrigger]="menuUser"
+             menu-align="right"
+             [ngStyle]="{'background-image': user.imagem ? 'url(' + user.imagem + ')' : '',
+                         'background-color': user.imagem ? 'white' : user.cor,
+                         'color': isBright(user.cor) ? 'black': 'white'}">
+            <span *ngIf="!user.imagem">{{ user.nome?.charAt(0) }}</span>
+        </div>
+        <div class="primary-text">{{ user.nome }}</div>
+    </header>
+    <div class="ui-menu-content size-3x">
+        <div class="ui-menu-item" uiRipple (click)="logoff()">
+            Sair
+        </div>
+    </div>
+</ui-menu>
+
