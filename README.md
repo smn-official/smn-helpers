@@ -14,5 +14,8 @@ Desenvolvido com objetivo de ajudar na economia de requisições e banda do clie
 - ***smn-class-autocomplete***
 Classe utilizada para a implementação simplificação do UiAutocomplete em projetos com o SMNUI.
 
+- ***smn-forms***
+Conjunto de componentes e classes para uma implementação simples e limpa de campos de texto, selects e autocompletes
+
 ***
 **Feito com ❤️ pelos Devs da [SMN](http://smn.com.br/)**
